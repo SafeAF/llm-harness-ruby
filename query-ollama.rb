@@ -1,24 +1,30 @@
-# Query ollama container remotely
-
 require 'net/http'
 require 'uri'
 require 'json'
 
-# Replace with your Docker host's IP address
-DOCKER_HOST_IP = '192.168.1.100'
-SERVER_PORT = '9292'
-ENDPOINT = "/api/v1/your_endpoint"
+# Specify the URL of your Ollama server's API endpoint
+uri = URI('http://10.0.0.19:4000/api/generate')
 
-uri = URI.parse("http://#{DOCKER_HOST_IP}:#{SERVER_PORT}#{ENDPOINT}")
+# Prepare the data payload
+data = {
+  model: 'llama3',
+  prompt: 'Why is the sky blue?'
+}.to_json
 
-# Example of making a GET request
-response = Net::HTTP.get(uri)
-puts "Response: #{response}"
-
-# Example of making a POST request with JSON payload
+# Create the HTTP objects
 http = Net::HTTP.new(uri.host, uri.port)
-request = Net::HTTP::Post.new(uri.request_uri, { 'Content-Type' => 'application/json' })
-request.body = { key: 'value' }.to_json
+request = Net::HTTP::Post.new(uri.path, 'Content-Type' => 'application/json')
+request.body = data
 
+# Send the request
 response = http.request(request)
-puts "Response: #{response.body}"
+
+# Print the response body
+puts response.body
+
+# Check if the response was successful
+if response.is_a?(Net::HTTPSuccess)
+  puts "POST request sent successfully!"
+else
+  puts "Failed to send POST request, response code: #{response.code}"
+end
