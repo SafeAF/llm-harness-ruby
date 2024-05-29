@@ -3,7 +3,7 @@ require 'uri'
 require 'json'
 
 # Specify the URL of your Ollama server's API endpoint
-uri = URI('http://10.0.0.19:4000/api/generate')
+uri = URI('http://localhost:4000/api/generate')
 
 # Prepare the data payload
 data = {
@@ -16,15 +16,19 @@ http = Net::HTTP.new(uri.host, uri.port)
 request = Net::HTTP::Post.new(uri.path, 'Content-Type' => 'application/json')
 request.body = data
 
-# Send the request
+# Send the request and collect the response
 response = http.request(request)
-
-# Print the response body
-puts response.body
 
 # Check if the response was successful
 if response.is_a?(Net::HTTPSuccess)
-  puts "POST request sent successfully!"
+  # Parse the JSON response
+  json_response = JSON.parse(response.body)
+  
+  # Collect all parts of the response
+  full_response = json_response.map { |entry| entry['response'] }.join('')
+
+  # Print the formatted response
+  puts "Response from Ollama:\n\n#{full_response}"
 else
   puts "Failed to send POST request, response code: #{response.code}"
 end
