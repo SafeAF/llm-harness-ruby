@@ -1,3 +1,4 @@
+# ollama_client.rb
 require 'net/http'
 require 'uri'
 require 'json'
@@ -6,7 +7,7 @@ def query_ollama(uri, prompt)
   # Prepare the data payload
   data = {
     model: 'llama3:latest',
-    prompt: prompt
+    prompt: "#{prompt}\n\nPlease respond in three sentences or less."
   }.to_json
 
   # Create the HTTP objects
@@ -35,9 +36,16 @@ def query_ollama(uri, prompt)
       end
     end
 
-    # Print the formatted response
-    puts "Response from Ollama:\n\n#{full_response}"
+    # Return the formatted response
+    truncate_response(full_response)
   else
-    puts "Failed to send POST request, response code: #{response.code}"
+    "Failed to send POST request, response code: #{response.code}"
   end
+end
+
+def truncate_response(response)
+  sentences = response.split('.')
+  truncated_response = sentences.first(3).join('. ')
+  truncated_response += '.' unless truncated_response.end_with?('.')
+  truncated_response
 end
