@@ -7,7 +7,7 @@ def query_ollama(uri, prompt)
   # Prepare the data payload
   data = {
     model: 'llama3:latest',
-    prompt: "#{prompt}\n\nPlease respond in three sentences or less."
+    prompt: "#{prompt}\n\nPlease draw upon the whole of their collective works to make your arguments. Do the absolute best you can. Make it interesting. Keep the conversation lively and varied. Have them discuss everything from their philosophies to current issues to ancient or even unresolved issues in philosophy."
   }.to_json
 
   # Create the HTTP objects
