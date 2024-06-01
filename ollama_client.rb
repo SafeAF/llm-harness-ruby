@@ -9,11 +9,11 @@ def query_ollama(uri, prompt)
     data = {
     model: 'llama3:latest',
     prompt: prompt,
-    temperature: 0.7,
+    temperature: 0.8,
     top_p: 0.9,
-    max_tokens: 500,
+    max_tokens: 1500,
     presence_penalty: 0.6,
-    frequency_penalty: 0.0,
+    frequency_penalty: 0.6,
     prompt: "#{prompt}\n\nPlease draw upon the whole of their collective works to make your arguments. Do the absolute best you can. Make it interesting. Keep the conversation lively and varied. Have them discuss everything from their philosophies to current issues to ancient or even unresolved issues in philosophy."
   }.to_json
 
